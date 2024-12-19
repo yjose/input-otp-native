@@ -1,3 +1,3 @@
-export function multiply(a: number, b: number): number {
-  return a * b;
-}
+export * from './input';
+export * from './regexp';
+export type { OTPInputProps, SlotProps, RenderProps } from './types';

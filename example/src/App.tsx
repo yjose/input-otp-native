@@ -1,12 +1,11 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { multiply } from 'input-otp-native';
-
-const result = multiply(3, 7);
+import OTPInputExample from './otp-input-example';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Hello World</Text>
+      <OTPInputExample />
     </View>
   );
 }
