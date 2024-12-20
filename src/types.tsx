@@ -30,14 +30,6 @@ type OTPInputBaseProps = OverrideProps<
   }
 >;
 type InputOTPRenderFn = (props: RenderProps) => React.ReactNode;
-export type OTPInputProps = OTPInputBaseProps &
-  (
-    | {
-        render: InputOTPRenderFn;
-        children?: never;
-      }
-    | {
-        render?: never;
-        children: React.ReactNode;
-      }
-  );
+export type OTPInputProps = OTPInputBaseProps & {
+  render: InputOTPRenderFn;
+};
