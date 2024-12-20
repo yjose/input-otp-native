@@ -1,5 +1,13 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
+import Animated, {
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  withSequence,
+  useSharedValue,
+} from 'react-native-reanimated';
+import { useEffect } from 'react';
 
 function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
   return (
@@ -11,9 +19,26 @@ function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
 }
 
 function FakeCaret() {
+  const opacity = useSharedValue(1);
+
+  useEffect(() => {
+    opacity.value = withRepeat(
+      withSequence(
+        withTiming(0, { duration: 500 }),
+        withTiming(1, { duration: 500 })
+      ),
+      -1, // infinite repeats
+      true // reverse
+    );
+  }, [opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
+
   return (
     <View style={styles.fakeCaretContainer}>
-      <View style={styles.fakeCaret} />
+      <Animated.View style={[styles.fakeCaret, animatedStyle]} />
     </View>
   );
 }
