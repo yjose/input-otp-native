@@ -115,7 +115,10 @@
     },
     "plugins": {
       "@release-it/conventional-changelog": {
-        "preset": "angular"
+        "preset": {
+          "name": "angular"
+        },
+        "infile": "CHANGELOG.md"
       }
     }
   },
@@ -154,7 +157,6 @@
     "source": "src",
     "output": "lib",
     "targets": [
-      "codegen",
       [
         "commonjs",
         {
@@ -175,18 +177,6 @@
         }
       ]
     ]
-  },
-  "codegenConfig": {
-    "name": "RNInputOtpNativeSpec",
-    "type": "modules",
-    "jsSrcsDir": "src",
-    "outputDir": {
-      "ios": "ios/generated",
-      "android": "android/generated"
-    },
-    "android": {
-      "javaPackageName": "com.inputotpnative"
-    }
   },
   "create-react-native-library": {
     "languages": "js",
