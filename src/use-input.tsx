@@ -9,6 +9,7 @@ export function useInput({
   placeholder,
   defaultValue,
   onComplete,
+  pasteTransformer,
 }: Pick<
   OTPInputProps,
   | 'onChange'
@@ -17,6 +18,7 @@ export function useInput({
   | 'placeholder'
   | 'defaultValue'
   | 'onComplete'
+  | 'pasteTransformer'
 >) {
   const [value, setValue] = React.useState(
     typeof defaultValue === 'string' ? defaultValue : ''
@@ -38,7 +40,13 @@ export function useInput({
 
   const onChangeText = React.useCallback(
     (text: string) => {
-      const newValue = text.slice(0, maxLength);
+      // Detect paste operation: if text length increases by more than 1 character
+      // it's likely a paste operation rather than normal typing
+      const isPaste = text.length > value.length + 1;
+      const transformedText =
+        isPaste && pasteTransformer ? pasteTransformer(text) : text;
+      const newValue = transformedText.slice(0, maxLength);
+
       if (newValue.length > 0 && regexp && !regexp.test(newValue)) {
         return;
       }
@@ -48,7 +56,7 @@ export function useInput({
         onComplete?.(newValue);
       }
     },
-    [maxLength, regexp, _onChange, onComplete]
+    [maxLength, regexp, _onChange, onComplete, pasteTransformer, value.length]
   );
 
   const onFocus = React.useCallback(() => {
