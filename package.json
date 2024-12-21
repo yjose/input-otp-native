@@ -1,7 +1,7 @@
 {
   "name": "input-otp-native",
   "version": "0.1.0",
-  "description": "input otp for react native",
+  "description": "One time passcode Input For React Native/Expo. Unstyled and fully customizable.",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
@@ -32,8 +32,10 @@
   },
   "keywords": [
     "react-native",
-    "ios",
-    "android"
+    "otp",
+    "otp-input",
+    "react-native-otp-input",
+    "expo-otp-input"
   ],
   "repository": {
     "type": "git",
