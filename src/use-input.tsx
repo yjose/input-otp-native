@@ -95,7 +95,6 @@ export function useInput({
     };
   }, [isFocused, maxLength, value, placeholder]);
 
-  console.log(contextValue);
   return {
     inputRef,
     contextValue,

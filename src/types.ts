@@ -6,11 +6,15 @@ export interface SlotProps {
   placeholderChar: string | null;
   hasFakeCaret: boolean;
 }
+
 export interface RenderProps {
   slots: SlotProps[];
   isFocused: boolean;
 }
+
 type OverrideProps<T, R> = Omit<T, keyof R> & R;
+
+// TODO: remove values from the types  as well as onTextChange
 type OTPInputBaseProps = OverrideProps<
   TextInputProps,
   {
@@ -18,7 +22,7 @@ type OTPInputBaseProps = OverrideProps<
     onChange?: (newValue: string) => unknown;
 
     maxLength: number;
-    pattern?: string;
+    pattern?: string | RegExp;
 
     textAlign?: 'left' | 'center' | 'right';
 
@@ -29,7 +33,9 @@ type OTPInputBaseProps = OverrideProps<
     containerStyle?: StyleProp<ViewStyle>;
   }
 >;
-type InputOTPRenderFn = (props: RenderProps) => React.ReactNode;
+
+export type InputOTPRenderFn = (props: RenderProps) => React.ReactNode;
+
 export type OTPInputProps = OTPInputBaseProps & {
-  render: InputOTPRenderFn;
+  render?: InputOTPRenderFn;
 };

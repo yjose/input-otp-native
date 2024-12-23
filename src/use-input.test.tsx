@@ -1,7 +1,13 @@
 import { act, renderHook } from '@testing-library/react-native';
 import { useInput } from './use-input';
+import { TextInput } from 'react-native';
+
 describe('useInput', () => {
-  // Setup section
+  const defaultProps = {
+    maxLength: 4,
+    onChange: jest.fn(),
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -193,5 +199,85 @@ describe('useInput', () => {
       expect(activeSlot?.isActive).toBe(true);
       expect(activeSlot?.hasFakeCaret).toBe(true);
     });
+  });
+
+  describe('pattern validation', () => {
+    test('handles undefined pattern', () => {
+      const { result } = renderHook(() =>
+        useInput({
+          ...defaultProps,
+          pattern: undefined,
+        })
+      );
+
+      act(() => {
+        result.current.handlers.onChangeText('123');
+      });
+
+      expect(result.current.value).toBe('123');
+    });
+
+    test('handles string pattern', () => {
+      const { result } = renderHook(() =>
+        useInput({
+          ...defaultProps,
+          pattern: '^[0-9]+$',
+        })
+      );
+
+      // Test valid input
+      act(() => {
+        result.current.handlers.onChangeText('123');
+      });
+      expect(result.current.value).toBe('123');
+
+      // Test invalid input
+      act(() => {
+        result.current.handlers.onChangeText('abc');
+      });
+      expect(result.current.value).toBe('123'); // Value should not change
+    });
+
+    test('handles RegExp pattern', () => {
+      const { result } = renderHook(() =>
+        useInput({
+          ...defaultProps,
+          pattern: /^[0-9]+$/,
+        })
+      );
+
+      // Test valid input
+      act(() => {
+        result.current.handlers.onChangeText('123');
+      });
+      expect(result.current.value).toBe('123');
+
+      // Test invalid input
+      act(() => {
+        result.current.handlers.onChangeText('abc');
+      });
+      expect(result.current.value).toBe('123'); // Value should not change
+    });
+  });
+
+  test('focus action focuses the input', () => {
+    const mockFocus = jest.fn();
+    const { result } = renderHook(() =>
+      useInput({
+        ...defaultProps,
+      })
+    );
+
+    // Mock the inputRef.current
+    (result.current.inputRef as React.MutableRefObject<TextInput>).current = {
+      focus: mockFocus,
+      clear: jest.fn(),
+    } as unknown as TextInput;
+
+    act(() => {
+      result.current.actions.focus();
+    });
+
+    expect(mockFocus).toHaveBeenCalled();
   });
 });

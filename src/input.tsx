@@ -41,7 +41,11 @@ export const OTPInput = React.forwardRef<TextInput, OTPInputProps>(
     }, [actions]);
 
     return (
-      <Pressable style={[styles.container, containerStyle]} onPress={onPress}>
+      <Pressable
+        testID="otp-input-container"
+        style={[styles.container, containerStyle]}
+        onPress={onPress}
+      >
         {renderedChildren}
         <TextInput
           ref={inputRef}
@@ -55,6 +59,9 @@ export const OTPInput = React.forwardRef<TextInput, OTPInputProps>(
           inputMode={inputMode}
           autoComplete={Platform.OS === 'android' ? 'sms-otp' : 'one-time-code'}
           clearTextOnFocus
+          accessible
+          accessibilityRole="text"
+          testID="otp-input"
           {...props}
         />
       </Pressable>
