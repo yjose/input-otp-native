@@ -1,5 +1,9 @@
 
 
+## 0.3.0 (2024-12-23)
+
+* feat: add missed test to input ([8af17e8](https://github.com/yjose/input-otp-native/commit/8af17e8))
+
 ## 0.2.0 (2024-12-21)
 
 * chore: initial commit ([25c730c](https://github.com/yjose/input-otp-native/commit/25c730c))
