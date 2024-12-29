@@ -1,9 +1,11 @@
 import { View, Text, Platform } from 'react-native';
+import * as React from 'react';
 import {
   cleanup,
   render,
   screen,
   fireEvent,
+  act,
 } from '@testing-library/react-native';
 
 import { OTPInput } from './input';
@@ -12,6 +14,7 @@ import type {
   OTPInputProps,
   RenderProps,
   SlotProps,
+  OTPInputRef,
 } from './types';
 
 afterEach(cleanup);
@@ -260,6 +263,111 @@ describe('OTPInput', () => {
       fireEvent.changeText(input, '123456');
 
       expect(input.props.value.length).toBeLessThanOrEqual(4);
+    });
+  });
+
+  describe('Ref Methods', () => {
+    test('setValue updates input value through ref', async () => {
+      const ref = React.createRef<OTPInputRef>();
+      render(
+        <OTPInput
+          ref={ref}
+          onChange={onChangeMock}
+          maxLength={6}
+          render={defaultRender}
+        />
+      );
+
+      const input = await screen.findByTestId('otp-input');
+      await act(async () => {
+        ref.current?.setValue('123');
+      });
+
+      expect(input.props.value).toBe('123');
+      expect(onChangeMock).toHaveBeenCalledWith('123');
+    });
+
+    test('focus method focuses the input through ref', async () => {
+      const ref = React.createRef<OTPInputRef>();
+      render(
+        <OTPInput
+          ref={ref}
+          onChange={onChangeMock}
+          maxLength={6}
+          render={defaultRender}
+        />
+      );
+
+      const cells = await screen.findByTestId('otp-cells');
+      const input = await screen.findByTestId('otp-input');
+
+      await act(async () => {
+        ref.current?.focus();
+        // we need to call onFocus by fireEvent because test environment do not support onFocus
+        // see the issue https://github.com/callstack/react-native-testing-library/issues/1069
+        fireEvent(input, 'focus');
+      });
+
+      expect(cells.props['data-focused']).toBe(true);
+    });
+
+    test('blur method blurs the input through ref', async () => {
+      const ref = React.createRef<OTPInputRef>();
+      render(
+        <OTPInput
+          ref={ref}
+          onChange={onChangeMock}
+          maxLength={6}
+          render={defaultRender}
+        />
+      );
+
+      const input = await screen.findByTestId('otp-input');
+      const cells = await screen.findByTestId('otp-cells');
+
+      // First focus
+      await act(async () => {
+        ref.current?.focus();
+        // we need to call onFocus by fireEvent because test environment do not support onFocus
+        // see the issue https://github.com/callstack/react-native-testing-library/issues/1069
+        fireEvent(input, 'focus');
+      });
+      expect(cells.props['data-focused']).toBe(true);
+
+      // Then blur
+      await act(async () => {
+        ref.current?.blur();
+        // we need to call onBlur by fireEvent because test environment do not support onBlur
+        // see the issue https://github.com/callstack/react-native-testing-library/issues/1069
+        fireEvent(input, 'blur');
+      });
+      expect(cells.props['data-focused']).toBe(false);
+    });
+
+    test('clear method clears the input through ref', async () => {
+      const ref = React.createRef<OTPInputRef>();
+      render(
+        <OTPInput
+          ref={ref}
+          onChange={onChangeMock}
+          maxLength={6}
+          render={defaultRender}
+        />
+      );
+
+      const input = await screen.findByTestId('otp-input');
+
+      // First set a value
+      await act(async () => {
+        ref.current?.setValue('123');
+      });
+      expect(input.props.value).toBe('123');
+
+      // Then clear it
+      await act(async () => {
+        ref.current?.clear();
+      });
+      expect(input.props.value).toBe('');
     });
   });
 });

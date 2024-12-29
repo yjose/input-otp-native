@@ -39,3 +39,10 @@ export type InputOTPRenderFn = (props: RenderProps) => React.ReactNode;
 export type OTPInputProps = OTPInputBaseProps & {
   render?: InputOTPRenderFn;
 };
+
+export type OTPInputRef = {
+  setValue: (value: string) => void;
+  focus: () => void;
+  blur: () => void;
+  clear: () => void;
+};

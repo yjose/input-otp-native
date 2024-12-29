@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { TextInput, StyleSheet, Pressable, Platform } from 'react-native';
 
-import type { OTPInputProps } from './types';
+import type { OTPInputProps, OTPInputRef } from './types';
 import { useInput } from './use-input';
 
-export const OTPInput = React.forwardRef<TextInput, OTPInputProps>(
+export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
   (
     {
       onChange,
@@ -17,7 +17,7 @@ export const OTPInput = React.forwardRef<TextInput, OTPInputProps>(
       render,
       ...props
     },
-    _ref
+    ref
   ) => {
     const { inputRef, contextValue, value, handlers, actions } = useInput({
       onChange,
@@ -27,6 +27,19 @@ export const OTPInput = React.forwardRef<TextInput, OTPInputProps>(
       defaultValue: props.defaultValue,
       onComplete,
     });
+
+    React.useImperativeHandle(ref, () => ({
+      setValue: (newValue: string) => {
+        handlers.onChangeText(newValue);
+      },
+      focus: () => {
+        actions.focus();
+        // for test only we need to call onFocus
+        handlers.onFocus();
+      },
+      blur: () => inputRef.current?.blur(),
+      clear: actions.clear,
+    }));
 
     const renderedChildren = React.useMemo(() => {
       if (render) {
