@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, type ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withRepeat,
@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 
-export function FakeCaret() {
+export function FakeCaret({ style }: { style?: ViewStyle }) {
   const opacity = useSharedValue(1);
 
   useEffect(() => {
@@ -28,7 +28,9 @@ export function FakeCaret() {
 
   return (
     <View style={styles.fakeCaretContainer}>
-      <Animated.View style={[styles.fakeCaret, animatedStyle]} />
+      <Animated.View
+        style={StyleSheet.flatten([styles.fakeCaret, style, animatedStyle])}
+      />
     </View>
   );
 }
