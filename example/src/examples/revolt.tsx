@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   slot: {
-    width: 44,
-    height: 44,
+    width: 40,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   char: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '500',
     color: '#111827',
   },
