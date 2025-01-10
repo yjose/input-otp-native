@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.0",
+    "clsx": "^2.1.1",
     "expo": "~52.0.20",
     "expo-status-bar": "~2.0.0",
+    "nativewind": "^4.1.23",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.5",
     "react-native-reanimated": "^3.16.6",
-    "react-native-web": "~0.19.13"
+    "react-native-web": "~0.19.13",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
