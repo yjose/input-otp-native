@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, type ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, type ViewStyle, Alert } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import { useRef } from 'react';
@@ -14,11 +14,16 @@ import { useEffect } from 'react';
 
 export default function DashedOTPInput() {
   const ref = useRef<OTPInputRef>(null);
+  const onComplete = (code: string) => {
+    Alert.alert('Completed with code:', code);
+    ref.current?.clear();
+  };
 
   return (
     <View>
       <OTPInput
         ref={ref}
+        onComplete={onComplete}
         containerStyle={styles.container}
         maxLength={5}
         render={({ slots }) => (

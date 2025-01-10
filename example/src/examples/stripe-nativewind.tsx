@@ -2,6 +2,7 @@ import { View, Text } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import { useRef } from 'react';
+import { Alert } from 'react-native';
 
 import Animated, {
   useAnimatedStyle,
@@ -15,9 +16,15 @@ import { cn } from './utils';
 
 export default function StripeOTPInput() {
   const ref = useRef<OTPInputRef>(null);
+  const onComplete = (code: string) => {
+    Alert.alert('Completed with code:', code);
+    ref.current?.clear();
+  };
+
   return (
     <OTPInput
       ref={ref}
+      onComplete={onComplete}
       maxLength={6}
       render={({ slots }) => (
         <View className="flex-1 flex-row items-center justify-center my-4">

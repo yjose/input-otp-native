@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, type ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, type ViewStyle, Alert } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import { useRef } from 'react';
@@ -14,10 +14,15 @@ import { useEffect } from 'react';
 
 export default function StripeOTPInput() {
   const ref = useRef<OTPInputRef>(null);
+  const onComplete = (code: string) => {
+    Alert.alert('Completed with code:', code);
+    ref.current?.clear();
+  };
 
   return (
     <OTPInput
       ref={ref}
+      onComplete={onComplete}
       maxLength={6}
       render={({ slots }) => (
         <View style={styles.mainContainer}>

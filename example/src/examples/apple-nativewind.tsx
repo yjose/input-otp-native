@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import { useRef } from 'react';
@@ -15,21 +15,24 @@ import { cn } from './utils';
 
 export default function AppleOTPInput() {
   const ref = useRef<OTPInputRef>(null);
+  const onComplete = (code: string) => {
+    Alert.alert('Completed with code:', code);
+    ref.current?.clear();
+  };
 
   return (
-    <View>
-      <OTPInput
-        ref={ref}
-        maxLength={5}
-        render={({ slots }) => (
-          <View className="flex-row gap-2 items-center justify-center my-4">
-            {slots.map((slot, idx) => (
-              <Slot key={idx} {...slot} />
-            ))}
-          </View>
-        )}
-      />
-    </View>
+    <OTPInput
+      ref={ref}
+      onComplete={onComplete}
+      maxLength={5}
+      render={({ slots }) => (
+        <View className="flex-row gap-2 items-center justify-center my-4">
+          {slots.map((slot, idx) => (
+            <Slot key={idx} {...slot} />
+          ))}
+        </View>
+      )}
+    />
   );
 }
 
