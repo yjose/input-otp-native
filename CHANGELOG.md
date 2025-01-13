@@ -1,5 +1,16 @@
 
 
+## 0.4.0 (2025-01-13)
+
+* chore: improve docs examples ([77e0a7f](https://github.com/yjose/input-otp-native/commit/77e0a7f))
+* feat: add docs ([ad9a5d0](https://github.com/yjose/input-otp-native/commit/ad9a5d0))
+* feat: add example ([0ddfae5](https://github.com/yjose/input-otp-native/commit/0ddfae5))
+* feat: add more nativewind examples ([2682334](https://github.com/yjose/input-otp-native/commit/2682334))
+* feat: add onComplete demo ([7ab4c56](https://github.com/yjose/input-otp-native/commit/7ab4c56))
+* feat: add ref calls function for the otp input ([534b556](https://github.com/yjose/input-otp-native/commit/534b556))
+* feat(example): add example actions ([d7f32f3](https://github.com/yjose/input-otp-native/commit/d7f32f3))
+* fix: fix utils import ([9fcd76b](https://github.com/yjose/input-otp-native/commit/9fcd76b))
+
 ## 0.3.0 (2024-12-23)
 
 * feat: add missed test to input ([8af17e8](https://github.com/yjose/input-otp-native/commit/8af17e8))
