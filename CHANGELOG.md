@@ -1,5 +1,9 @@
 
 
+## <small>0.4.1 (2025-04-20)</small>
+
+* fix: fix typescript import ([aae1a8c](https://github.com/yjose/input-otp-native/commit/aae1a8c))
+
 ## 0.4.0 (2025-01-13)
 
 * chore: improve docs examples ([77e0a7f](https://github.com/yjose/input-otp-native/commit/77e0a7f))
