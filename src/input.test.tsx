@@ -241,7 +241,8 @@ describe('OTPInput', () => {
 
       // Test invalid input
       fireEvent.changeText(input, 'abc');
-      expect(onChangeMock).not.toHaveBeenCalled();
+      expect(onChangeMock).toHaveBeenCalledTimes(1);
+      expect(onChangeMock).toHaveBeenCalledWith('');
       expect(input.props.value).toBe('');
 
       // Test valid input
