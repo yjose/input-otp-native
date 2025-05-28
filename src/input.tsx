@@ -70,6 +70,11 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
           onBlur={handlers.onBlur}
           placeholder={placeholder}
           inputMode={inputMode}
+          /**
+           * On iOS if the input has an opacity of 0, we can't paste text into it.
+           * As we're setting the opacity to 0.02, we need to hide the caret.
+           */
+          caretHidden={Platform.OS === 'ios'}
           autoComplete={Platform.OS === 'android' ? 'sms-otp' : 'one-time-code'}
           clearTextOnFocus
           accessible
@@ -90,7 +95,19 @@ const styles = StyleSheet.create({
   },
   input: {
     ...StyleSheet.absoluteFillObject,
-    opacity: 0,
+    /**
+     * On iOS if the input has an opacity of 0, we can't paste text into it.
+     * This is a workaround to allow pasting text into the input.
+     */
+    ...Platform.select({
+      ios: {
+        opacity: 0.02,
+        color: 'transparent',
+      },
+      android: {
+        opacity: 0,
+      },
+    }),
     backgroundColor: 'red',
   },
 });
