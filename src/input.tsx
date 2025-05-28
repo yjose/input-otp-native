@@ -4,9 +4,17 @@ import { TextInput, StyleSheet, Pressable, Platform } from 'react-native';
 import type { OTPInputProps, OTPInputRef } from './types';
 import { useInput } from './use-input';
 
+/**
+ * Default paste transformer that removes all non-numeric characters.
+ */
+const defaultPasteTransformer = (pasted: string) => {
+  return pasted.replace(/[^0-9]/g, '');
+};
+
 export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
   (
     {
+      style,
       onChange,
       maxLength,
       pattern,
@@ -25,6 +33,7 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
       pattern,
       placeholder,
       defaultValue: props.defaultValue,
+      pasteTransformer: props.pasteTransformer ?? defaultPasteTransformer,
       onComplete,
     });
 
@@ -62,7 +71,7 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
         {renderedChildren}
         <TextInput
           ref={inputRef}
-          style={styles.input}
+          style={[styles.input, style]}
           maxLength={maxLength}
           value={value}
           onChangeText={handlers.onChangeText}
