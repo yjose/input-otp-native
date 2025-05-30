@@ -44,7 +44,8 @@ export function useInput({
       // it's likely a paste operation rather than normal typing
       const isPaste = text.length > value.length + 1;
       const transformedText =
-        isPaste && pasteTransformer ? pasteTransformer(text) : text;
+        isPaste && pasteTransformer ? pasteTransformer(text, maxLength) : text;
+      // Slice the text to the maxLength as we're not limiting the input length to handle paste properly
       const newValue = transformedText.slice(0, maxLength);
 
       if (newValue.length > 0 && regexp && !regexp.test(newValue)) {
