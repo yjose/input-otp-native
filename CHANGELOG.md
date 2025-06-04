@@ -1,5 +1,9 @@
 
 
+## <small>0.4.2 (2025-06-04)</small>
+
+* fix: iOS paste not working (#7) + Migrate example to expo 53 ([a8387a6](https://github.com/yjose/input-otp-native/commit/a8387a6)), closes [#7](https://github.com/yjose/input-otp-native/issues/7)
+
 ## <small>0.4.1 (2025-04-20)</small>
 
 * fix: fix typescript import ([aae1a8c](https://github.com/yjose/input-otp-native/commit/aae1a8c))
