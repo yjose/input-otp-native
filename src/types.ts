@@ -27,7 +27,7 @@ type OTPInputBaseProps = OverrideProps<
     textAlign?: 'left' | 'center' | 'right';
 
     onComplete?: (...args: any[]) => unknown;
-    pasteTransformer?: (pasted: string, maxLength: number) => string;
+    pasteTransformer?: (pasted: string) => string;
 
     containerClassName?: string;
     containerStyle?: StyleProp<ViewStyle>;

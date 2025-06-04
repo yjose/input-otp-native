@@ -7,7 +7,7 @@ import { useInput } from './use-input';
 /**
  * Default paste transformer that removes all non-numeric characters.
  */
-const defaultPasteTransformer = (pasted: string, maxLength: number) => {
+const defaultPasteTransformer = (maxLength: number) => (pasted: string) => {
   // match exactly maxLength digits, not preceded or followed by another digit
   const otpRegex = new RegExp(`(?<!\\d)(\\d{${maxLength}})(?!\\d)`);
   const match = pasted.match(otpRegex);
@@ -37,7 +37,8 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
       pattern,
       placeholder,
       defaultValue: props.defaultValue,
-      pasteTransformer: props.pasteTransformer ?? defaultPasteTransformer,
+      pasteTransformer:
+        props.pasteTransformer ?? defaultPasteTransformer(maxLength),
       onComplete,
     });
 
