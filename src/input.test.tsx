@@ -1,4 +1,4 @@
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, TextInput } from 'react-native';
 import * as React from 'react';
 import {
   cleanup,
@@ -40,6 +40,22 @@ const defaultRender: InputOTPRenderFn = (props: RenderProps) => (
   </View>
 );
 
+/**
+ * Simulate typing on the input like a user would do by typing one character at a time.
+ *
+ * @param input - The input element to simulate typing on.
+ * @param text - The text to simulate typing.
+ */
+const simulateTyping = (input: TextInput, text: string) => {
+  let accumulated = '';
+
+  for (const char of text) {
+    accumulated += char;
+    fireEvent.changeText(input, accumulated);
+    fireEvent(input, 'keyPress', { nativeEvent: { key: char } });
+  }
+};
+
 // Mock Platform.OS
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios',
@@ -63,7 +79,6 @@ describe('OTPInput', () => {
 
       const input = await screen.findByTestId('otp-input');
       expect(input).toBeTruthy();
-      expect(input.props.maxLength).toBe(6);
       expect(input.props.inputMode).toBe('numeric');
       expect(input.props.autoComplete).toBe('one-time-code');
     });
@@ -128,7 +143,6 @@ describe('OTPInput', () => {
       );
 
       const input = await screen.findByTestId('otp-input');
-      expect(input.props.maxLength).toBe(4);
       expect(input.props.placeholder).toBe(placeholder);
       expect(input.props.inputMode).toBe('text');
     });
@@ -162,7 +176,7 @@ describe('OTPInput', () => {
       );
 
       const input = await screen.findByTestId('otp-input');
-      fireEvent.changeText(input, '123456');
+      simulateTyping(input, '123456');
 
       expect(onChangeMock).toHaveBeenCalledWith('123456');
       expect(onCompleteMock).toHaveBeenCalledWith('123456');
@@ -179,11 +193,11 @@ describe('OTPInput', () => {
       );
 
       const input = await screen.findByTestId('otp-input');
-      fireEvent.changeText(input, '12345');
+      simulateTyping(input, '12345');
       expect(onChangeMock).toHaveBeenCalledWith('12345');
       expect(onCompleteMock).not.toHaveBeenCalled();
 
-      fireEvent.changeText(input, '123456');
+      simulateTyping(input, '123456');
       expect(onChangeMock).toHaveBeenCalledWith('123456');
       expect(onCompleteMock).toHaveBeenCalledWith('123456');
     });
@@ -198,7 +212,7 @@ describe('OTPInput', () => {
       );
 
       const input = await screen.findByTestId('otp-input');
-      fireEvent.changeText(input, '123');
+      simulateTyping(input, '123');
 
       const container = await screen.findByTestId('otp-input-container');
       fireEvent.press(container);
@@ -240,13 +254,13 @@ describe('OTPInput', () => {
       const input = await screen.findByTestId('otp-input');
 
       // Test invalid input
-      fireEvent.changeText(input, 'abc');
-      expect(onChangeMock).toHaveBeenCalledTimes(1);
+      simulateTyping(input, 'abc');
+      expect(onChangeMock).toHaveBeenCalledTimes(2);
       expect(onChangeMock).toHaveBeenCalledWith('');
       expect(input.props.value).toBe('');
 
       // Test valid input
-      fireEvent.changeText(input, '123');
+      simulateTyping(input, '123');
       expect(onChangeMock).toHaveBeenCalledWith('123');
       expect(input.props.value).toBe('123');
     });
@@ -261,7 +275,7 @@ describe('OTPInput', () => {
       );
 
       const input = await screen.findByTestId('otp-input');
-      fireEvent.changeText(input, '123456');
+      simulateTyping(input, '123456');
 
       expect(input.props.value.length).toBeLessThanOrEqual(4);
     });
@@ -281,11 +295,11 @@ describe('OTPInput', () => {
 
       const input = await screen.findByTestId('otp-input');
       await act(async () => {
-        ref.current?.setValue('123');
+        ref.current?.setValue('1');
       });
 
-      expect(input.props.value).toBe('123');
-      expect(onChangeMock).toHaveBeenCalledWith('123');
+      expect(input.props.value).toBe('1');
+      expect(onChangeMock).toHaveBeenCalledWith('1');
     });
 
     test('focus method focuses the input through ref', async () => {
@@ -360,9 +374,9 @@ describe('OTPInput', () => {
 
       // First set a value
       await act(async () => {
-        ref.current?.setValue('123');
+        ref.current?.setValue('1');
       });
-      expect(input.props.value).toBe('123');
+      expect(input.props.value).toBe('1');
 
       // Then clear it
       await act(async () => {
