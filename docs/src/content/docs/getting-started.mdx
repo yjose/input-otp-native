@@ -2,9 +2,13 @@
 title: Getting Started
 description: A guide to get you started with Input OTP Native.
 showTitle: false
+head:
+  - tag: title
+    content: Getting Started | OTP Input for React Native/Expo
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Code } from '@astrojs/starlight/components';
 
 ## Features
 
@@ -19,13 +23,13 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 <Tabs>
   <TabItem label="npm" icon="npm">
-    npm install input-otp-native
+    <Code language="bash" code="npm install input-otp-native" />
   </TabItem>
   <TabItem label="yarn" icon="seti:yarn">
-    yarn add input-otp-native
+    <Code language="bash" code="yarn add input-otp-native" />
   </TabItem>
   <TabItem label="pnpm" icon="pnpm">
-    pnpm add input-otp-native
+    <Code language="bash" code="pnpm add input-otp-native" />
   </TabItem>
 </Tabs>
 

@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import tailwindcss from '@tailwindcss/vite';
+import starlightThemeRapide from 'starlight-theme-rapide';
+
 import path from 'path';
 
 import cloudflare from '@astrojs/cloudflare';
@@ -10,7 +12,8 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   integrations: [
     starlight({
-      title: '🔐 Input OTP Native',
+      title: 'Input OTP Native',
+      plugins: [starlightThemeRapide()],
       social: [
         {
           icon: 'github',
