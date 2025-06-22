@@ -14,6 +14,7 @@ export default defineConfig({
     starlight({
       title: 'Input OTP Native',
       plugins: [starlightThemeRapide()],
+      head: [{ tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico' } }],
       social: [
         {
           icon: 'github',
