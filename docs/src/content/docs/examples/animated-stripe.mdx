@@ -1,0 +1,25 @@
+---
+title: Animated Stripe
+description: React Native OTPInput with animated Stripe style
+head:
+  - tag: title
+    content: Animated Stripe OTPInput | React Native OTPInput with animated Stripe style
+---
+
+import { Code } from '@astrojs/starlight/components';
+import animatedStripeCode from '@example/src/examples/animated-stripe-nativewind.tsx?raw';
+
+## Animated Stripe Style
+
+This example demonstrates an animated version of the Stripe-style OTP input with:
+
+- **Fade-in animations** for entered characters
+- **NativeWind styling** for consistent design
+
+> Make sure you have `react-native-reanimated` and Nativewind installed and configured in your project.
+
+<Code
+  code={animatedStripeCode}
+  lang="tsx"
+  title="animated-stripe-nativewind.tsx"
+/>

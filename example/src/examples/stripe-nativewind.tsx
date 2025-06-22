@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
   withSequence,
   useSharedValue,
+  withSpring,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { cn } from './utils';
@@ -53,6 +54,28 @@ function Slot({
 }: SlotProps & { index: number }) {
   const isFirst = index === 0;
   const isLast = index === 2;
+  const translateY = useSharedValue(0);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (char !== null) {
+      // Animate in when character appears
+      translateY.value = withSpring(0, {
+        damping: 15,
+        stiffness: 150,
+      });
+      opacity.value = withSpring(1, {
+        damping: 15,
+        stiffness: 150,
+      });
+    }
+  }, [char, translateY, opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+    opacity: opacity.value,
+  }));
+
   return (
     <View
       className={cn(
@@ -65,9 +88,11 @@ function Slot({
         }
       )}
     >
-      {char !== null && (
-        <Text className="text-2xl font-medium text-gray-900">{char}</Text>
-      )}
+      <Animated.View style={animatedStyle}>
+        {char !== null && (
+          <Text className="text-2xl font-medium text-gray-900">{char}</Text>
+        )}
+      </Animated.View>
       {hasFakeCaret && <FakeCaret />}
     </View>
   );
