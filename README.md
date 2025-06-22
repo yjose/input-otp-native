@@ -1,8 +1,23 @@
-![Input OTP Native](./demo.gif)
+<p align="center">
+    <img alt="Input OTP Native" src="./demo.gif"   />
+</p>
+<h1 align="center">
+Input OTP Native 🔐
+</h1>
+<p align="center">
+✨ One time passcode Input For React Native/Expo. Unstyled and fully customizable. ✨
+</p>
 
-# Input OTP Native 🔐
+<p align="center">
+<a href="https://github.com/yjose/input-otp-native/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/yjose/input-otp-native/ci.yml?style=flat-square&label=Test&logo=github&color=32A9C3&labelColor=1B3C4A" alt="Test status"></a>
+  <a href="https://www.npmjs.com/package/input-otp-native"><img src="https://img.shields.io/npm/v/input-otp-native.svg?style=flat-square&color=32A9C3&labelColor=1B3C4A" alt="version"></a>
+  <a href="http://www.npmtrends.com/input-otp-native"><img src="https://img.shields.io/npm/dt/input-otp-native.svg?style=flat-square&color=32A9C3&labelColor=1B3C4A" alt="downloads"></a>
+  <a href="https://github.com/yjose/input-otp-native/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/input-otp-native.svg?style=flat-square&color=32A9C3&labelColor=1B3C4A" alt="license"></a>
+  <a href="https://github.com/yjose/input-otp-native/stargazers"><img src="https://img.shields.io/github/stars/yjose/input-otp-native.svg?style=flat-square&color=32A9C3&labelColor=1B3C4A" alt="Star on GitHub"></a>
 
-One time passcode Input For React Native/Expo. Unstyled and fully customizable.
+</p>
+
+<hr/>
 
 ## Features
 
@@ -10,8 +25,8 @@ One time passcode Input For React Native/Expo. Unstyled and fully customizable.
 - 🎨 Fully customizable styling with render props ( supports nativewind )
 - 📋 Four copy paste styles (Apple, Stripe, Revolt, Dashed)
 - 🧪 100% test coverage
-
-## Installation
+- 🔄 Easily animated with react-native-reanimated
+- 🌐 Web support with using `otp-input`
 
 ```sh
 ## npm
@@ -23,6 +38,12 @@ yarn add input-otp-native
 #pnpm
 pnpm add input-otp-native
 ```
+
+## Full Documentation
+
+[Homepage](https://input-otp-native.better-app.dev)
+[Getting Started](https://input-otp-native.better-app.dev/getting-started)
+[Examples](https://input-otp-native.better-app.dev/examples)
 
 ## Examples
 

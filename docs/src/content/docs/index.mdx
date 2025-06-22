@@ -1,0 +1,40 @@
+---
+title: Welcome to Starlight
+description: Get started building your docs site with Starlight.
+template: splash
+hero:
+  title: ''
+---
+
+import Hero from '../../components/hero.astro';
+
+<Hero />
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Features
+
+<CardGrid stagger>
+  <Card title="React Native/Expo Support" icon="laptop">
+    Built specifically for React Native and Expo applications.
+  </Card>
+  <Card title="Production Ready" icon="approve-check">
+    100% test coverage ensuring reliability and stability.
+  </Card>
+  <Card title="Customizable Styling" icon="setting">
+    Fully customizable styling with render props, including NativeWind support.
+  </Card>
+  <Card title="Multiple Styles" icon="pencil">
+    Four copy paste styles available: Apple, Stripe, Revolt, and Dashed.
+  </Card>
+
+{' '}
+
+<Card title="Easily Animated" icon="puzzle">
+  As simple as using react-native-reanimated.
+</Card>
+
+  <Card title="Web Support" icon="puzzle">
+    Works on web  using <a href="https://github.com/guilhermerodz/input-otp" target="_blank" rel="noopener noreferrer">otp-input</a>
+  </Card>
+</CardGrid>

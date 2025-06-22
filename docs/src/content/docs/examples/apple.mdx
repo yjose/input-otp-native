@@ -1,0 +1,22 @@
+---
+title: Apple
+description: React Native OTPInput with Apple style
+head:
+  - tag: title
+    content: Apple OTPInput | React Native OTPInput with Apple style
+---
+
+import { Code } from '@astrojs/starlight/components';
+import appleCodeStyle from '../example/src/examples/apple.tsx?raw';
+
+import appleCodeNativeWind from '../example/src/examples/apple-nativewind.tsx?raw';
+
+## Using Nativewind
+
+> Make sure Nativewind is installed and configured in your project.
+
+<Code code={appleCodeNativeWind} lang="tsx" title="apple-nativewind.tsx" />
+
+## Using StyleSheet
+
+<Code code={appleCodeStyle} lang="tsx" title="apple.tsx" />

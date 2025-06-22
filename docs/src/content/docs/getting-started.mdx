@@ -1,0 +1,83 @@
+---
+title: Getting Started
+description: A guide to get you started with Input OTP Native.
+showTitle: false
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Features
+
+- 📱 Built specifically for React Native/Expo
+- 🎨 Fully customizable styling with render props ( supports nativewind )
+- 📋 Four copy paste styles (Apple, Stripe, Revolt, Dashed)
+- 🧪 100% test coverage
+- 🔄 Easily animated with react-native-reanimated
+- 🌐 Web support with using `otp-input`
+
+## Installation
+
+<Tabs>
+  <TabItem label="npm" icon="npm">
+    npm install input-otp-native
+  </TabItem>
+  <TabItem label="yarn" icon="seti:yarn">
+    yarn add input-otp-native
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+    pnpm add input-otp-native
+  </TabItem>
+</Tabs>
+
+## Usage and Examples
+
+We create a few examples that you can copy paste and use in your project.
+
+- [Stripe style](./examples/stripe)
+- [Apple style](./examples/apple)
+- [Revolt style](./examples/revolt)
+- [Dashed style](./examples/dashed)
+
+## OTPInput Props
+
+| Prop               | Type                              | Default   | Description                         |
+| ------------------ | --------------------------------- | --------- | ----------------------------------- |
+| `maxLength`        | number                            | Required  | Number of OTP digits                |
+| `render`           | (props: RenderProps) => ReactNode | Required  | Render function for OTP slots       |
+| `value`            | string                            | undefined | Controlled value of the input       |
+| `onChange`         | (value: string) => void           | undefined | Callback when value changes         |
+| `onComplete`       | (value: string) => void           | undefined | Callback when all digits are filled |
+| `containerStyle`   | ViewStyle                         | undefined | Style for the container             |
+| `pattern`          | string                            | undefined | Regex pattern for input validation  |
+| `textAlign`        | 'left' \| 'center' \| 'right'     | 'left'    | Text alignment within input         |
+| `pasteTransformer` | (pasted: string) => string        | undefined | Transform pasted text               |
+
+## RenderProps
+
+| Prop        | Type        | Description                     |
+| ----------- | ----------- | ------------------------------- |
+| `slots`     | SlotProps[] | Array of slot objects to render |
+| `isFocused` | boolean     | Whether the input is focused    |
+
+## SlotProps
+
+| Prop              | Type           | Description                |
+| ----------------- | -------------- | -------------------------- |
+| `char`            | string \| null | Character in the slot      |
+| `isActive`        | boolean        | Whether the slot is active |
+| `hasFakeCaret`    | boolean        | Whether to show fake caret |
+| `placeholderChar` | string \| null | Placeholder character      |
+
+## Web support
+
+The library is mainly inspired by [otp-input](https://github.com/guilhermerodz/input-otp) and has a similar API, so we recommend using it on the web.
+
+We can easily create the same component for web and create a new file for it (example/src/examples/apple.web.tsx)
+
+## Contributing
+
+See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+
+## License
+
+MIT

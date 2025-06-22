@@ -1,0 +1,22 @@
+---
+title: Stripe
+description: React Native OTPInput with Stripe style
+head:
+  - tag: title
+    content: Stripe OTPInput | React Native OTPInput with Stripe style
+---
+
+import { Code } from '@astrojs/starlight/components';
+import stripCodeStyle from '../example/src/examples/stripe.tsx?raw';
+
+import stripCodeNativeWind from '../example/src/examples/stripe-nativewind.tsx?raw';
+
+## Using Nativewind
+
+> Make sure Nativewind is installed and configured in your project.
+
+<Code code={stripCodeNativeWind} lang="tsx" title="stripe-nativewind.tsx" />
+
+## Using StyleSheet
+
+<Code code={stripCodeStyle} lang="tsx" title="stripe.tsx" />
