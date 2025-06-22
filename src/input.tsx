@@ -88,6 +88,7 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
            * As we're setting the opacity to 0.02, we need to hide the caret.
            */
           caretHidden={Platform.OS === 'ios'}
+          textContentType="oneTimeCode"
           autoComplete={Platform.OS === 'android' ? 'sms-otp' : 'one-time-code'}
           clearTextOnFocus
           accessible
