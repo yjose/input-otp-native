@@ -2,6 +2,9 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
+
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
@@ -30,7 +33,15 @@ export default defineConfig({
       ],
     }),
   ],
+
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        '@example': path.resolve('../example'),
+      },
+    },
   },
+
+  adapter: cloudflare(),
 });
