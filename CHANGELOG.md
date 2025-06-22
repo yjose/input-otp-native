@@ -1,5 +1,12 @@
 
 
+## 0.5.0 (2025-06-22)
+
+* docs: update docs + example links ([b0e1816](https://github.com/yjose/input-otp-native/commit/b0e1816))
+* fix: fix docs config ([e10cac4](https://github.com/yjose/input-otp-native/commit/e10cac4))
+* feat: add docs website ([257b15b](https://github.com/yjose/input-otp-native/commit/257b15b))
+* feat: add oneTimeCode as default prop ([e8a000f](https://github.com/yjose/input-otp-native/commit/e8a000f))
+
 ## <small>0.4.2 (2025-06-04)</small>
 
 * fix: iOS paste not working (#7) + Migrate example to expo 53 ([a8387a6](https://github.com/yjose/input-otp-native/commit/a8387a6)), closes [#7](https://github.com/yjose/input-otp-native/issues/7)
