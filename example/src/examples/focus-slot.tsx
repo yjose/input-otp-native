@@ -18,9 +18,7 @@ export default function FocusSlotExample() {
         render={({ slots }) => (
           <View style={styles.slotsRow}>
             {slots.map((slot, index) => (
-              <Pressable key={index} onPress={slot.focus}>
-                <Slot {...slot} />
-              </Pressable>
+              <Slot key={index} {...slot} />
             ))}
           </View>
         )}
@@ -30,12 +28,15 @@ export default function FocusSlotExample() {
   );
 }
 
-function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
+function Slot({ char, isActive, hasFakeCaret, focus }: SlotProps) {
   return (
-    <View style={[styles.slot, isActive && styles.activeSlot]}>
+    <Pressable
+      onPress={focus}
+      style={[styles.slot, isActive && styles.activeSlot]}
+    >
       {char !== null && <Text style={styles.char}>{char}</Text>}
       {hasFakeCaret && <FakeCaret />}
-    </View>
+    </Pressable>
   );
 }
 

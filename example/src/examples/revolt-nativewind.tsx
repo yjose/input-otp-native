@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, Pressable } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import React, { useRef } from 'react';
@@ -41,9 +41,10 @@ export default function RevoltOTPInput() {
   );
 }
 
-function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
+function Slot({ char, isActive, hasFakeCaret, focus }: SlotProps) {
   return (
-    <View
+    <Pressable
+      onPress={focus}
       className={cn(
         'w-12 h-12 items-center justify-center border border-gray-200 rounded-lg bg-gray-50',
         {
@@ -55,7 +56,7 @@ function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
         <Text className="text-xl font-medium text-gray-900">{char}</Text>
       )}
       {hasFakeCaret && <FakeCaret />}
-    </View>
+    </Pressable>
   );
 }
 

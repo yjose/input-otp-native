@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import { useRef } from 'react';
@@ -50,6 +50,7 @@ function Slot({
   char,
   isActive,
   hasFakeCaret,
+  focus,
   index,
 }: SlotProps & { index: number }) {
   const isFirst = index === 0;
@@ -77,7 +78,8 @@ function Slot({
   }));
 
   return (
-    <View
+    <Pressable
+      onPress={focus}
       className={cn(
         `w-12 h-16 items-center justify-center bg-gray-50`,
         'border border-gray-200',
@@ -94,7 +96,7 @@ function Slot({
         )}
       </Animated.View>
       {hasFakeCaret && <FakeCaret />}
-    </View>
+    </Pressable>
   );
 }
 
