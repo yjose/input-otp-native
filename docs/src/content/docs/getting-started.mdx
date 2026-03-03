@@ -73,6 +73,51 @@ We create a few examples that you can copy paste and use in your project.
 | `hasFakeCaret`    | boolean        | Whether to show fake caret |
 | `placeholderChar` | string \| null | Placeholder character      |
 
+## OTPInputRef
+
+Use a `ref` to call imperative methods on the input:
+
+```tsx
+const ref = useRef<OTPInputRef>(null);
+<OTPInput ref={ref} ... />
+```
+
+| Method                    | Description                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------------- |
+| `focus()`                 | Focus the input                                                                                   |
+| `blur()`                  | Blur the input                                                                                    |
+| `clear()`                 | Clear all digits                                                                                  |
+| `setValue(value: string)` | Set the current value programmatically                                                            |
+| `focusSlot(index: number)`| Truncate the value to `index` characters and focus — making slot `index` the new active slot     |
+
+### focusSlot
+
+`focusSlot(index)` lets users jump to any slot by tapping it. Wrap each slot in a `Pressable` and call `ref.current?.focusSlot(index)` in its `onPress`:
+
+```tsx
+const ref = useRef<OTPInputRef>(null);
+
+<OTPInput
+  ref={ref}
+  maxLength={6}
+  render={({ slots }) => (
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      {slots.map((slot, index) => (
+        <Pressable key={index} onPress={() => ref.current?.focusSlot(index)}>
+          <Slot {...slot} />
+        </Pressable>
+      ))}
+    </View>
+  )}
+/>
+```
+
+Tapping slot `3` on a fully filled `"123456"` → value becomes `"123"`, slot `3` is now active.
+
+- `focusSlot(0)` — equivalent to `clear()`, resets everything
+- `focusSlot(maxLength)` — moves focus to the end without clearing
+- Indexes outside `[0, maxLength]` are clamped automatically
+
 ## Web support
 
 The library is mainly inspired by [otp-input](https://github.com/guilhermerodz/input-otp) and has a similar API, so we recommend using it on the web.

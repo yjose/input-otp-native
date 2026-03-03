@@ -16,6 +16,7 @@ import AppleNativewind from './examples/apple-nativewind';
 import DashedNativewind from './examples/dashed-nativewind';
 import AnimatedDashedNativewind from './examples/animated-dashed-nativewind';
 import AnimatedStripeOTPInput from './examples/animated-stripe-nativewind';
+import FocusSlotExample from './examples/focus-slot';
 
 type TabType = 'regular' | 'nativewind';
 
@@ -29,6 +30,13 @@ export default function App() {
       regular: StripeOTPInput,
       nativewind: StripeNativewind,
       color: '#6772E5',
+    },
+    {
+      title: 'Animated Stripe',
+      description: 'Stripe style with slide-in animation',
+      regular: AnimatedStripeOTPInput,
+      nativewind: AnimatedStripeOTPInput,
+      color: '#8B5CF6',
     },
     {
       title: 'Apple',
@@ -59,11 +67,11 @@ export default function App() {
       color: '#8B5CF6',
     },
     {
-      title: 'Animated Stripe',
-      description: 'Stripe style with slide-in animation',
-      regular: AnimatedStripeOTPInput,
-      nativewind: AnimatedStripeOTPInput,
-      color: '#8B5CF6',
+      title: 'Focus Slot',
+      description: 'Tap any slot to focus it using focusSlot(index)',
+      regular: FocusSlotExample,
+      nativewind: FocusSlotExample,
+      color: '#10B981',
     },
   ];
 
@@ -116,14 +124,14 @@ export default function App() {
             className="mx-5 mt-5 bg-white rounded-2xl shadow-sm"
           >
             <View className="flex-row items-center px-4 py-2 border-b border-slate-200">
-              <View
+              {/* <View
                 className="w-10 h-10 rounded-full items-center justify-center mr-3"
                 style={{ backgroundColor: example.color }}
               >
                 <Text className="text-white text-lg font-bold">
                   {example.title[0]}
                 </Text>
-              </View>
+              </View> */}
               <View className="flex-1">
                 <Text className="text-lg font-semibold text-slate-800 mb-1">
                   {example.title}

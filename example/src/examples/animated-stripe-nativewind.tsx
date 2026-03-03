@@ -18,32 +18,30 @@ export default function AnimatedStripeOTPInput() {
   const ref = useRef<OTPInputRef>(null);
   const onComplete = (code: string) => {
     Alert.alert('Completed with code:', code);
-    ref.current?.clear();
+    // ref.current?.clear();
   };
 
   return (
-    <View>
-      <OTPInput
-        ref={ref}
-        onComplete={onComplete}
-        maxLength={6}
-        render={({ slots }) => (
-          <View className="flex-1 flex-row items-center justify-center my-4">
-            <View className="flex-row">
-              {slots.slice(0, 3).map((slot, idx) => (
-                <Slot key={idx} {...slot} index={idx} />
-              ))}
-            </View>
-            <FakeDash />
-            <View className="flex-row">
-              {slots.slice(3).map((slot, idx) => (
-                <Slot key={idx} {...slot} index={idx + 3} />
-              ))}
-            </View>
+    <OTPInput
+      ref={ref}
+      onComplete={onComplete}
+      maxLength={6}
+      render={({ slots }) => (
+        <View className="flex-1 flex-row items-center justify-center my-4">
+          <View className="flex-row">
+            {slots.slice(0, 3).map((slot, idx) => (
+              <Slot key={idx} {...slot} index={idx} />
+            ))}
           </View>
-        )}
-      />
-    </View>
+          <FakeDash />
+          <View className="flex-row">
+            {slots.slice(3).map((slot, idx) => (
+              <Slot key={idx} {...slot} index={idx + 3} />
+            ))}
+          </View>
+        </View>
+      )}
+    />
   );
 }
 

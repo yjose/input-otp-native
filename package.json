@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "example": "yarn workspace input-otp-native-example",
-    "docs": "yarn workspace docs",
+    "docs": "yarn workspace docs run dev",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
