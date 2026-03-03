@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { TextInput } from 'react-native';
+import {
+  TextInput,
+  type NativeSyntheticEvent,
+  type TextInputSelectionChangeEventData,
+} from 'react-native';
 import type { OTPInputProps, RenderProps } from './types';
 
 export function useInput({
@@ -35,11 +39,18 @@ export function useInput({
   );
 
   const inputRef = React.useRef<TextInput>(null);
+  const suppressNextClearOnFocusRef = React.useRef(false);
 
   const [isFocused, setIsFocused] = React.useState(false);
 
+  const [, setSelectionResetTick] = React.useState(0);
+
   const onChangeText = React.useCallback(
     (text: string) => {
+      if (suppressNextClearOnFocusRef.current && text === '') {
+        suppressNextClearOnFocusRef.current = false;
+        return;
+      }
       // Detect paste operation: if text length increases by more than 1 character
       // it's likely a paste operation rather than normal typing
       const isPaste = text.length > value.length + 1;
@@ -68,6 +79,17 @@ export function useInput({
     setIsFocused(false);
   }, []);
 
+  const onSelectionChange = React.useCallback(
+    (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {
+      const { start, end } = e.nativeEvent.selection;
+      if (start !== value.length || end !== value.length) {
+        // Cursor moved away from end — force re-render to snap it back
+        setSelectionResetTick((n) => n + 1);
+      }
+    },
+    [value.length]
+  );
+
   const clear = React.useCallback(() => {
     inputRef.current?.clear();
     setValue('');
@@ -76,6 +98,18 @@ export function useInput({
   const focus = React.useCallback(() => {
     inputRef.current?.focus();
   }, []);
+
+  const focusSlot = React.useCallback(
+    (index: number) => {
+      suppressNextClearOnFocusRef.current = true;
+      const clampedIndex = Math.max(0, Math.min(index, maxLength));
+      const newValue = value.substring(0, clampedIndex);
+      setValue(newValue);
+      _onChange?.(newValue);
+      inputRef.current?.focus();
+    },
+    [value, maxLength, _onChange]
+  );
 
   const contextValue = React.useMemo<RenderProps>(() => {
     return {
@@ -90,11 +124,12 @@ export function useInput({
           placeholderChar,
           isActive,
           hasFakeCaret: isActive && char === null,
+          focus: () => focusSlot(slotIdx),
         };
       }),
       isFocused,
     };
-  }, [isFocused, maxLength, value, placeholder]);
+  }, [isFocused, maxLength, value, placeholder, focusSlot]);
 
   return {
     inputRef,
@@ -105,10 +140,12 @@ export function useInput({
       onChangeText,
       onFocus,
       onBlur,
+      onSelectionChange,
     },
     actions: {
       clear,
       focus,
+      focusSlot,
     },
   };
 }

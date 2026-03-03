@@ -1,14 +1,5 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  type ViewStyle,
-  Alert,
-  Pressable,
-} from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
-import type { OTPInputRef } from 'input-otp-native';
-import { useRef } from 'react';
 
 import Animated, {
   useAnimatedStyle,
@@ -19,28 +10,20 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 
-export default function AppleOTPInput() {
-  const ref = useRef<OTPInputRef>(null);
-  const onComplete = (code: string) => {
-    Alert.alert('Completed with code:', code);
-    ref.current?.clear();
-  };
-
+export default function FocusSlotExample() {
   return (
-    <View>
+    <View style={styles.wrapper}>
       <OTPInput
-        ref={ref}
-        onComplete={onComplete}
-        containerStyle={styles.container}
-        maxLength={5}
+        maxLength={6}
         render={({ slots }) => (
-          <View style={styles.slotsContainer}>
-            {slots.map((slot, idx) => (
-              <Slot key={idx} {...slot} />
+          <View style={styles.slotsRow}>
+            {slots.map((slot, index) => (
+              <Slot key={index} {...slot} />
             ))}
           </View>
         )}
       />
+      <Text style={styles.hint}>Tap any slot to focus it</Text>
     </View>
   );
 }
@@ -57,7 +40,7 @@ function Slot({ char, isActive, hasFakeCaret, focus }: SlotProps) {
   );
 }
 
-function FakeCaret({ style }: { style?: ViewStyle }) {
+function FakeCaret() {
   const opacity = useSharedValue(1);
 
   useEffect(() => {
@@ -77,41 +60,39 @@ function FakeCaret({ style }: { style?: ViewStyle }) {
 
   return (
     <View style={styles.fakeCaretContainer}>
-      <Animated.View style={[styles.fakeCaret, style, animatedStyle]} />
+      <Animated.View style={[styles.fakeCaret, animatedStyle]} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
+  wrapper: {
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 10,
   },
-  slotsContainer: {
+  slotsRow: {
     flexDirection: 'row',
     gap: 8,
   },
   slot: {
-    width: 50,
-    height: 50,
+    width: 42,
+    height: 52,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#F9FAFB',
     borderWidth: 1,
     borderColor: '#E5E7EB',
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
   },
   activeSlot: {
-    borderColor: '#000000',
-    borderWidth: 2,
+    backgroundColor: '#FFF',
+    borderColor: '#000',
   },
   char: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '500',
     color: '#111827',
   },
-  /* Caret */
   fakeCaretContainer: {
     position: 'absolute',
     width: '100%',
@@ -124,5 +105,9 @@ const styles = StyleSheet.create({
     height: 28,
     backgroundColor: '#000',
     borderRadius: 1,
+  },
+  hint: {
+    fontSize: 12,
+    color: '#6B7280',
   },
 });

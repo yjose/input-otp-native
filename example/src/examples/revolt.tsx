@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, type ViewStyle, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  type ViewStyle,
+  Alert,
+  Pressable,
+} from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import React, { useRef } from 'react';
@@ -41,12 +48,15 @@ export default function RevoltOTPInput() {
   );
 }
 
-function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
+function Slot({ char, isActive, hasFakeCaret, focus }: SlotProps) {
   return (
-    <View style={[styles.slot, isActive && styles.activeSlot]}>
+    <Pressable
+      onPress={focus}
+      style={[styles.slot, isActive && styles.activeSlot]}
+    >
       {char !== null && <Text style={styles.char}>{char}</Text>}
       {hasFakeCaret && <FakeCaret />}
-    </View>
+    </Pressable>
   );
 }
 

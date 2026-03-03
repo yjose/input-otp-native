@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, Pressable } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import { useRef } from 'react';
@@ -38,9 +38,12 @@ export default function DashedOTPInput() {
   );
 }
 
-function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
+function Slot({ char, isActive, hasFakeCaret, focus }: SlotProps) {
   return (
-    <View className="w-12 h-12 mx-2 items-center justify-center">
+    <Pressable
+      onPress={focus}
+      className="w-12 h-12 mx-2 items-center justify-center"
+    >
       {char !== null && (
         <Text className="text-3xl font-medium text-gray-900">{char}</Text>
       )}
@@ -50,7 +53,7 @@ function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
           'bg-gray-900 h-0.5': isActive,
         })}
       />
-    </View>
+    </Pressable>
   );
 }
 

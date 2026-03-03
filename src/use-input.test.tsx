@@ -1,6 +1,10 @@
 import { act, renderHook } from '@testing-library/react-native';
 import { useInput } from './use-input';
-import { TextInput } from 'react-native';
+import {
+  TextInput,
+  type NativeSyntheticEvent,
+  type TextInputSelectionChangeEventData,
+} from 'react-native';
 
 describe('useInput', () => {
   const defaultProps = {
@@ -114,6 +118,24 @@ describe('useInput', () => {
       expect(onChange).toHaveBeenCalledWith('1234');
     });
 
+    test('onSelectionChange resets cursor when it moves from end', () => {
+      const { result } = renderHook(() => useInput({ maxLength: 4 }));
+
+      act(() => {
+        result.current.handlers.onChangeText('12');
+      });
+
+      // Simulate cursor moving to position 0 (arrow key navigation)
+      act(() => {
+        result.current.handlers.onSelectionChange({
+          nativeEvent: { selection: { start: 0, end: 0 } },
+        } as NativeSyntheticEvent<TextInputSelectionChangeEventData>);
+      });
+
+      // After re-render, value is unchanged (no data was lost)
+      expect(result.current.value).toBe('12');
+    });
+
     test('does not apply pasteTransformer on normal typing', () => {
       const onChange = jest.fn();
       const pasteTransformer = jest.fn((text) => text.replace(/\D/g, ''));
@@ -161,6 +183,99 @@ describe('useInput', () => {
       });
 
       expect(result.current.value).toBe('');
+    });
+
+    describe('focusSlot', () => {
+      test('truncates value to the given index', () => {
+        const onChange = jest.fn();
+        const { result } = renderHook(() =>
+          useInput({ maxLength: 6, defaultValue: '123456', onChange })
+        );
+
+        act(() => {
+          result.current.actions.focusSlot(3);
+        });
+
+        expect(result.current.value).toBe('123');
+        expect(onChange).toHaveBeenCalledWith('123');
+      });
+
+      test('focusSlot(0) clears the value entirely', () => {
+        const onChange = jest.fn();
+        const { result } = renderHook(() =>
+          useInput({ maxLength: 6, defaultValue: '123456', onChange })
+        );
+
+        act(() => {
+          result.current.actions.focusSlot(0);
+        });
+
+        expect(result.current.value).toBe('');
+        expect(onChange).toHaveBeenCalledWith('');
+      });
+
+      test('clamps index above maxLength to maxLength', () => {
+        const onChange = jest.fn();
+        const { result } = renderHook(() =>
+          useInput({ maxLength: 4, defaultValue: '1234', onChange })
+        );
+
+        act(() => {
+          result.current.actions.focusSlot(10);
+        });
+
+        expect(result.current.value).toBe('1234');
+        expect(onChange).toHaveBeenCalledWith('1234');
+      });
+
+      test('clamps negative index to 0', () => {
+        const onChange = jest.fn();
+        const { result } = renderHook(() =>
+          useInput({ maxLength: 4, defaultValue: '1234', onChange })
+        );
+
+        act(() => {
+          result.current.actions.focusSlot(-1);
+        });
+
+        expect(result.current.value).toBe('');
+        expect(onChange).toHaveBeenCalledWith('');
+      });
+
+      test('focuses the input', () => {
+        const mockFocus = jest.fn();
+        const { result } = renderHook(() =>
+          useInput({ maxLength: 4, defaultValue: '1234' })
+        );
+
+        (result.current.inputRef as React.MutableRefObject<TextInput>).current =
+          {
+            focus: mockFocus,
+            clear: jest.fn(),
+          } as unknown as TextInput;
+
+        act(() => {
+          result.current.actions.focusSlot(2);
+        });
+
+        expect(mockFocus).toHaveBeenCalled();
+      });
+
+      test('marks correct slot as active after focusSlot', () => {
+        const { result } = renderHook(() =>
+          useInput({ maxLength: 6, defaultValue: '123456' })
+        );
+
+        act(() => {
+          result.current.actions.focusSlot(3);
+          result.current.handlers.onFocus();
+        });
+
+        const slots = result.current.contextValue.slots;
+        expect(slots[3]?.isActive).toBe(true);
+        expect(slots[2]?.isActive).toBe(false);
+        expect(slots[4]?.isActive).toBe(false);
+      });
     });
   });
 

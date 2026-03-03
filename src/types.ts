@@ -5,6 +5,8 @@ export interface SlotProps {
   char: string | null;
   placeholderChar: string | null;
   hasFakeCaret: boolean;
+  /** Focuses the input at this slot's position. Automatically suppresses iOS clearTextOnFocus. */
+  focus: () => void;
 }
 
 export interface RenderProps {
@@ -38,6 +40,12 @@ export type InputOTPRenderFn = (props: RenderProps) => React.ReactNode;
 
 export type OTPInputProps = OTPInputBaseProps & {
   render?: InputOTPRenderFn;
+  /**
+   * Whether to clear the input when it receives focus.
+   * Not needed when using `slot.focus` — suppression is handled automatically.
+   * @default true
+   */
+  clearTextOnFocus?: boolean;
 };
 
 export type OTPInputRef = {
@@ -45,4 +53,5 @@ export type OTPInputRef = {
   focus: () => void;
   blur: () => void;
   clear: () => void;
+  focusSlot: (index: number) => void;
 };

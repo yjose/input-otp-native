@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, type ViewStyle, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  type ViewStyle,
+  Alert,
+  Pressable,
+} from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
 import type { OTPInputRef } from 'input-otp-native';
 import { useRef } from 'react';
@@ -47,13 +54,15 @@ function Slot({
   char,
   isActive,
   hasFakeCaret,
+  focus,
   index,
 }: SlotProps & { index: number }) {
   const isFirst = index === 0;
   const isLast = index === 2;
 
   return (
-    <View
+    <Pressable
+      onPress={focus}
       style={[
         styles.slot,
         isFirst && styles.slotFirst,
@@ -63,7 +72,7 @@ function Slot({
     >
       {char !== null && <Text style={styles.char}>{char}</Text>}
       {hasFakeCaret && <FakeCaret />}
-    </View>
+    </Pressable>
   );
 }
 
