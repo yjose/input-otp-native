@@ -77,6 +77,17 @@ export function useInput({
     inputRef.current?.focus();
   }, []);
 
+  const focusSlot = React.useCallback(
+    (index: number) => {
+      const clampedIndex = Math.max(0, Math.min(index, maxLength));
+      const newValue = value.substring(0, clampedIndex);
+      setValue(newValue);
+      _onChange?.(newValue);
+      inputRef.current?.focus();
+    },
+    [value, maxLength, _onChange]
+  );
+
   const contextValue = React.useMemo<RenderProps>(() => {
     return {
       slots: Array.from({ length: maxLength }).map((_, slotIdx) => {
@@ -109,6 +120,7 @@ export function useInput({
     actions: {
       clear,
       focus,
+      focusSlot,
     },
   };
 }

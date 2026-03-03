@@ -359,6 +359,93 @@ describe('OTPInput', () => {
       expect(cells.props['data-focused']).toBe(false);
     });
 
+    describe('focusSlot', () => {
+      test('truncates value to the given index and focuses', async () => {
+        const ref = React.createRef<OTPInputRef>();
+        render(
+          <OTPInput
+            ref={ref}
+            onChange={onChangeMock}
+            maxLength={6}
+            render={defaultRender}
+          />
+        );
+
+        const input = await screen.findByTestId('otp-input');
+        simulateTyping(input, '123456');
+
+        await act(async () => {
+          ref.current?.focusSlot(3);
+        });
+
+        expect(input.props.value).toBe('123');
+        expect(onChangeMock).toHaveBeenCalledWith('123');
+      });
+
+      test('focusSlot(0) clears all slots', async () => {
+        const ref = React.createRef<OTPInputRef>();
+        render(
+          <OTPInput
+            ref={ref}
+            onChange={onChangeMock}
+            maxLength={6}
+            render={defaultRender}
+          />
+        );
+
+        const input = await screen.findByTestId('otp-input');
+        simulateTyping(input, '123456');
+
+        await act(async () => {
+          ref.current?.focusSlot(0);
+        });
+
+        expect(input.props.value).toBe('');
+        expect(onChangeMock).toHaveBeenCalledWith('');
+      });
+
+      test('focusSlot beyond maxLength leaves value unchanged', async () => {
+        const ref = React.createRef<OTPInputRef>();
+        render(
+          <OTPInput
+            ref={ref}
+            onChange={onChangeMock}
+            maxLength={6}
+            render={defaultRender}
+          />
+        );
+
+        const input = await screen.findByTestId('otp-input');
+        simulateTyping(input, '123456');
+
+        await act(async () => {
+          ref.current?.focusSlot(10);
+        });
+
+        expect(input.props.value).toBe('123456');
+      });
+
+      test('focusSlot focuses the input', async () => {
+        const ref = React.createRef<OTPInputRef>();
+        render(
+          <OTPInput
+            ref={ref}
+            onChange={onChangeMock}
+            maxLength={6}
+            render={defaultRender}
+          />
+        );
+
+        const cells = await screen.findByTestId('otp-cells');
+
+        await act(async () => {
+          ref.current?.focusSlot(2);
+        });
+
+        expect(cells.props['data-focused']).toBe(true);
+      });
+    });
+
     test('clear method clears the input through ref', async () => {
       const ref = React.createRef<OTPInputRef>();
       render(

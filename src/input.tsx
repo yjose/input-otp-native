@@ -53,6 +53,10 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
       },
       blur: () => inputRef.current?.blur(),
       clear: actions.clear,
+      focusSlot: (index: number) => {
+        actions.focusSlot(index);
+        handlers.onFocus();
+      },
     }));
 
     const renderedChildren = React.useMemo(() => {

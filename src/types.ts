@@ -45,4 +45,5 @@ export type OTPInputRef = {
   focus: () => void;
   blur: () => void;
   clear: () => void;
+  focusSlot: (index: number) => void;
 };
