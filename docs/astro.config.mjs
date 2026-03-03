@@ -29,10 +29,6 @@ export default defineConfig({
           label: 'Examples',
           autogenerate: { directory: 'examples' },
         },
-        {
-          label: 'Guides',
-          autogenerate: { directory: 'guides' },
-        },
       ],
       customCss: [
         './src/styles/global.css',

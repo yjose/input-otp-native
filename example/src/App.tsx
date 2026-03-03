@@ -68,7 +68,7 @@ export default function App() {
     },
     {
       title: 'Focus Slot',
-      description: 'Tap any slot to focus it using focusSlot(index)',
+      description: 'Tap any slot to focus it using slot.focus()',
       regular: FocusSlotExample,
       nativewind: FocusSlotExample,
       color: '#10B981',

@@ -1,7 +1,5 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { OTPInput, type SlotProps } from 'input-otp-native';
-import type { OTPInputRef } from 'input-otp-native';
-import { useRef } from 'react';
 
 import Animated, {
   useAnimatedStyle,
@@ -13,20 +11,14 @@ import Animated, {
 import { useEffect } from 'react';
 
 export default function FocusSlotExample() {
-  const ref = useRef<OTPInputRef>(null);
-
   return (
     <View style={styles.wrapper}>
       <OTPInput
-        ref={ref}
         maxLength={6}
         render={({ slots }) => (
           <View style={styles.slotsRow}>
             {slots.map((slot, index) => (
-              <Pressable
-                key={index}
-                onPress={() => ref.current?.focusSlot(index)}
-              >
+              <Pressable key={index} onPress={slot.focus}>
                 <Slot {...slot} />
               </Pressable>
             ))}

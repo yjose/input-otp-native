@@ -220,6 +220,25 @@ describe('OTPInput', () => {
       expect(input.props.value).toBe('');
     });
 
+    test('does not clear input on container press when clearTextOnFocus is false', async () => {
+      render(
+        <OTPInput
+          onChange={onChangeMock}
+          maxLength={6}
+          clearTextOnFocus={false}
+          render={defaultRender}
+        />
+      );
+
+      const input = await screen.findByTestId('otp-input');
+      simulateTyping(input, '123');
+
+      const container = await screen.findByTestId('otp-input-container');
+      fireEvent.press(container);
+
+      expect(input.props.value).toBe('123');
+    });
+
     test('cursor is always locked to the end of the value', async () => {
       render(
         <OTPInput
@@ -255,6 +274,117 @@ describe('OTPInput', () => {
 
       // After the state reset re-render, selection prop is back at end
       expect(input.props.selection).toEqual({ start: 2, end: 2 });
+    });
+
+    describe('slot.focus', () => {
+      test('each slot has a focus function', async () => {
+        let capturedSlots: SlotProps[] = [];
+        const captureRender: InputOTPRenderFn = (props: RenderProps) => {
+          capturedSlots = props.slots;
+          return <View />;
+        };
+
+        render(
+          <OTPInput
+            onChange={onChangeMock}
+            maxLength={4}
+            render={captureRender}
+          />
+        );
+
+        await screen.findByTestId('otp-input');
+        expect(capturedSlots).toHaveLength(4);
+        capturedSlots.forEach((slot) => {
+          expect(typeof slot.focus).toBe('function');
+        });
+      });
+
+      test('slot.focus() truncates value to the slot index', async () => {
+        let capturedSlots: SlotProps[] = [];
+        const captureRender: InputOTPRenderFn = (props: RenderProps) => {
+          capturedSlots = props.slots;
+          return <View />;
+        };
+
+        render(
+          <OTPInput
+            onChange={onChangeMock}
+            maxLength={6}
+            render={captureRender}
+          />
+        );
+
+        const input = await screen.findByTestId('otp-input');
+        simulateTyping(input, '123456');
+
+        await act(async () => {
+          capturedSlots[3]!.focus();
+        });
+
+        expect(input.props.value).toBe('123');
+        expect(onChangeMock).toHaveBeenCalledWith('123');
+      });
+
+      test('slot.focus() suppresses subsequent iOS clearTextOnFocus empty string', async () => {
+        let capturedSlots: SlotProps[] = [];
+        const captureRender: InputOTPRenderFn = (props: RenderProps) => {
+          capturedSlots = props.slots;
+          return <View />;
+        };
+
+        render(
+          <OTPInput
+            onChange={onChangeMock}
+            maxLength={6}
+            render={captureRender}
+          />
+        );
+
+        const input = await screen.findByTestId('otp-input');
+        simulateTyping(input, '123456');
+
+        await act(async () => {
+          capturedSlots[3]!.focus();
+        });
+
+        // Simulate iOS native clearTextOnFocus firing onChangeText('')
+        fireEvent.changeText(input, '');
+
+        // Value should remain at '123', not cleared
+        expect(input.props.value).toBe('123');
+      });
+
+      test('subsequent onChangeText calls work normally after suppression is consumed', async () => {
+        let capturedSlots: SlotProps[] = [];
+        const captureRender: InputOTPRenderFn = (props: RenderProps) => {
+          capturedSlots = props.slots;
+          return <View />;
+        };
+
+        render(
+          <OTPInput
+            onChange={onChangeMock}
+            maxLength={6}
+            render={captureRender}
+          />
+        );
+
+        const input = await screen.findByTestId('otp-input');
+        simulateTyping(input, '123456');
+
+        await act(async () => {
+          capturedSlots[3]!.focus();
+        });
+
+        // Consume the suppression with simulated iOS clear
+        fireEvent.changeText(input, '');
+        expect(input.props.value).toBe('123');
+
+        // Subsequent typing should work normally
+        fireEvent.changeText(input, '1234');
+        expect(input.props.value).toBe('1234');
+        expect(onChangeMock).toHaveBeenCalledWith('1234');
+      });
     });
 
     test('handles focus and blur events', async () => {
@@ -394,93 +524,6 @@ describe('OTPInput', () => {
         fireEvent(input, 'blur');
       });
       expect(cells.props['data-focused']).toBe(false);
-    });
-
-    describe('focusSlot', () => {
-      test('truncates value to the given index and focuses', async () => {
-        const ref = React.createRef<OTPInputRef>();
-        render(
-          <OTPInput
-            ref={ref}
-            onChange={onChangeMock}
-            maxLength={6}
-            render={defaultRender}
-          />
-        );
-
-        const input = await screen.findByTestId('otp-input');
-        simulateTyping(input, '123456');
-
-        await act(async () => {
-          ref.current?.focusSlot(3);
-        });
-
-        expect(input.props.value).toBe('123');
-        expect(onChangeMock).toHaveBeenCalledWith('123');
-      });
-
-      test('focusSlot(0) clears all slots', async () => {
-        const ref = React.createRef<OTPInputRef>();
-        render(
-          <OTPInput
-            ref={ref}
-            onChange={onChangeMock}
-            maxLength={6}
-            render={defaultRender}
-          />
-        );
-
-        const input = await screen.findByTestId('otp-input');
-        simulateTyping(input, '123456');
-
-        await act(async () => {
-          ref.current?.focusSlot(0);
-        });
-
-        expect(input.props.value).toBe('');
-        expect(onChangeMock).toHaveBeenCalledWith('');
-      });
-
-      test('focusSlot beyond maxLength leaves value unchanged', async () => {
-        const ref = React.createRef<OTPInputRef>();
-        render(
-          <OTPInput
-            ref={ref}
-            onChange={onChangeMock}
-            maxLength={6}
-            render={defaultRender}
-          />
-        );
-
-        const input = await screen.findByTestId('otp-input');
-        simulateTyping(input, '123456');
-
-        await act(async () => {
-          ref.current?.focusSlot(10);
-        });
-
-        expect(input.props.value).toBe('123456');
-      });
-
-      test('focusSlot focuses the input', async () => {
-        const ref = React.createRef<OTPInputRef>();
-        render(
-          <OTPInput
-            ref={ref}
-            onChange={onChangeMock}
-            maxLength={6}
-            render={defaultRender}
-          />
-        );
-
-        const cells = await screen.findByTestId('otp-cells');
-
-        await act(async () => {
-          ref.current?.focusSlot(2);
-        });
-
-        expect(cells.props['data-focused']).toBe(true);
-      });
     });
 
     test('clear method clears the input through ref', async () => {

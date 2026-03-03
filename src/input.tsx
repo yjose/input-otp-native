@@ -27,6 +27,7 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
       containerStyle,
       onComplete,
       render,
+      clearTextOnFocus = true,
       ...props
     },
     ref
@@ -68,8 +69,8 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
 
     const onPress = React.useCallback(() => {
       actions.focus();
-      actions.clear();
-    }, [actions]);
+      if (clearTextOnFocus) actions.clear();
+    }, [actions, clearTextOnFocus]);
 
     return (
       <Pressable
@@ -81,6 +82,7 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
         <TextInput
           ref={inputRef}
           style={[styles.input, style]}
+          pointerEvents="none"
           value={value}
           onChangeText={handlers.onChangeText}
           onFocus={handlers.onFocus}
@@ -96,7 +98,7 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
           caretHidden={Platform.OS === 'ios'}
           textContentType="oneTimeCode"
           autoComplete={Platform.OS === 'android' ? 'sms-otp' : 'one-time-code'}
-          clearTextOnFocus
+          clearTextOnFocus={clearTextOnFocus}
           accessible
           accessibilityRole="text"
           testID="otp-input"

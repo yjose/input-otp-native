@@ -39,6 +39,7 @@ export function useInput({
   );
 
   const inputRef = React.useRef<TextInput>(null);
+  const suppressNextClearOnFocusRef = React.useRef(false);
 
   const [isFocused, setIsFocused] = React.useState(false);
 
@@ -46,6 +47,10 @@ export function useInput({
 
   const onChangeText = React.useCallback(
     (text: string) => {
+      if (suppressNextClearOnFocusRef.current && text === '') {
+        suppressNextClearOnFocusRef.current = false;
+        return;
+      }
       // Detect paste operation: if text length increases by more than 1 character
       // it's likely a paste operation rather than normal typing
       const isPaste = text.length > value.length + 1;
@@ -96,6 +101,7 @@ export function useInput({
 
   const focusSlot = React.useCallback(
     (index: number) => {
+      suppressNextClearOnFocusRef.current = true;
       const clampedIndex = Math.max(0, Math.min(index, maxLength));
       const newValue = value.substring(0, clampedIndex);
       setValue(newValue);
@@ -118,11 +124,12 @@ export function useInput({
           placeholderChar,
           isActive,
           hasFakeCaret: isActive && char === null,
+          focus: () => focusSlot(slotIdx),
         };
       }),
       isFocused,
     };
-  }, [isFocused, maxLength, value, placeholder]);
+  }, [isFocused, maxLength, value, placeholder, focusSlot]);
 
   return {
     inputRef,
