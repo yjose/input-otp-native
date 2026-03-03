@@ -85,6 +85,8 @@ export const OTPInput = React.forwardRef<OTPInputRef, OTPInputProps>(
           onChangeText={handlers.onChangeText}
           onFocus={handlers.onFocus}
           onBlur={handlers.onBlur}
+          selection={{ start: value.length, end: value.length }}
+          onSelectionChange={handlers.onSelectionChange}
           placeholder={placeholder}
           inputMode={inputMode}
           /**

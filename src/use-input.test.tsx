@@ -1,6 +1,10 @@
 import { act, renderHook } from '@testing-library/react-native';
 import { useInput } from './use-input';
-import { TextInput } from 'react-native';
+import {
+  TextInput,
+  type NativeSyntheticEvent,
+  type TextInputSelectionChangeEventData,
+} from 'react-native';
 
 describe('useInput', () => {
   const defaultProps = {
@@ -112,6 +116,24 @@ describe('useInput', () => {
       expect(pasteTransformer).toHaveBeenCalledWith('Code: 1234');
       expect(result.current.value).toBe('1234');
       expect(onChange).toHaveBeenCalledWith('1234');
+    });
+
+    test('onSelectionChange resets cursor when it moves from end', () => {
+      const { result } = renderHook(() => useInput({ maxLength: 4 }));
+
+      act(() => {
+        result.current.handlers.onChangeText('12');
+      });
+
+      // Simulate cursor moving to position 0 (arrow key navigation)
+      act(() => {
+        result.current.handlers.onSelectionChange({
+          nativeEvent: { selection: { start: 0, end: 0 } },
+        } as NativeSyntheticEvent<TextInputSelectionChangeEventData>);
+      });
+
+      // After re-render, value is unchanged (no data was lost)
+      expect(result.current.value).toBe('12');
     });
 
     test('does not apply pasteTransformer on normal typing', () => {

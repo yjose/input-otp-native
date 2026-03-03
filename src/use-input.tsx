@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { TextInput } from 'react-native';
+import {
+  TextInput,
+  type NativeSyntheticEvent,
+  type TextInputSelectionChangeEventData,
+} from 'react-native';
 import type { OTPInputProps, RenderProps } from './types';
 
 export function useInput({
@@ -38,6 +42,8 @@ export function useInput({
 
   const [isFocused, setIsFocused] = React.useState(false);
 
+  const [, setSelectionResetTick] = React.useState(0);
+
   const onChangeText = React.useCallback(
     (text: string) => {
       // Detect paste operation: if text length increases by more than 1 character
@@ -67,6 +73,17 @@ export function useInput({
   const onBlur = React.useCallback(() => {
     setIsFocused(false);
   }, []);
+
+  const onSelectionChange = React.useCallback(
+    (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {
+      const { start, end } = e.nativeEvent.selection;
+      if (start !== value.length || end !== value.length) {
+        // Cursor moved away from end — force re-render to snap it back
+        setSelectionResetTick((n) => n + 1);
+      }
+    },
+    [value.length]
+  );
 
   const clear = React.useCallback(() => {
     inputRef.current?.clear();
@@ -116,6 +133,7 @@ export function useInput({
       onChangeText,
       onFocus,
       onBlur,
+      onSelectionChange,
     },
     actions: {
       clear,

@@ -220,6 +220,43 @@ describe('OTPInput', () => {
       expect(input.props.value).toBe('');
     });
 
+    test('cursor is always locked to the end of the value', async () => {
+      render(
+        <OTPInput
+          onChange={onChangeMock}
+          maxLength={6}
+          render={defaultRender}
+        />
+      );
+      const input = await screen.findByTestId('otp-input');
+
+      simulateTyping(input, '12');
+
+      // selection prop should always be at end
+      expect(input.props.selection).toEqual({ start: 2, end: 2 });
+    });
+
+    test('cursor resets to end when onSelectionChange fires with wrong position', async () => {
+      render(
+        <OTPInput
+          onChange={onChangeMock}
+          maxLength={6}
+          render={defaultRender}
+        />
+      );
+      const input = await screen.findByTestId('otp-input');
+
+      simulateTyping(input, '12');
+
+      // Simulate cursor moved to position 0 by arrow key
+      fireEvent(input, 'selectionChange', {
+        nativeEvent: { selection: { start: 0, end: 0 } },
+      });
+
+      // After the state reset re-render, selection prop is back at end
+      expect(input.props.selection).toEqual({ start: 2, end: 2 });
+    });
+
     test('handles focus and blur events', async () => {
       render(
         <OTPInput
