@@ -1,5 +1,17 @@
 
 
+## 0.6.0 (2026-03-03)
+
+* docs: focusSlot docs ([f3a7ea6](https://github.com/yjose/input-otp-native/commit/f3a7ea6))
+* docs: sync README with getting-started docs ([c2081d6](https://github.com/yjose/input-otp-native/commit/c2081d6))
+* docs: update docs theme ([60bfa77](https://github.com/yjose/input-otp-native/commit/60bfa77))
+* feat: add animated otp to examples ([5a6e9b3](https://github.com/yjose/input-otp-native/commit/5a6e9b3))
+* feat: expose slot.focus() directly on SlotProps ([3b2ec81](https://github.com/yjose/input-otp-native/commit/3b2ec81))
+* feat: introduce `focusSlot` API to `OTPInputRef` for programmatic slot focusing ([67f1bec](https://github.com/yjose/input-otp-native/commit/67f1bec))
+* feat(examples): make Slot itself a Pressable using slot.focus ([f1efed8](https://github.com/yjose/input-otp-native/commit/f1efed8))
+* fix: lock cursor to end to prevent arrow key navigation issues ([b7dcde8](https://github.com/yjose/input-otp-native/commit/b7dcde8))
+* fix(docs): fix docs links ([1e98d2e](https://github.com/yjose/input-otp-native/commit/1e98d2e))
+
 ## 0.5.0 (2025-06-22)
 
 * docs: update docs + example links ([b0e1816](https://github.com/yjose/input-otp-native/commit/b0e1816))
