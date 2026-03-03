@@ -46,6 +46,7 @@ pnpm add input-otp-native
 - [Examples](https://input-otp-native.better-app.dev/examples)
   - [Apple](https://input-otp-native.better-app.dev/examples/apple)
   - [Stripe](https://input-otp-native.better-app.dev/examples/stripe)
+  - [Animated Stripe](https://input-otp-native.better-app.dev/examples/animated-stripe)
   - [Revolt](https://input-otp-native.better-app.dev/examples/revolt)
   - [Dashed](https://input-otp-native.better-app.dev/examples/dashed)
 
@@ -74,12 +75,47 @@ pnpm add input-otp-native
 
 ### SlotProps
 
-| Prop              | Type           | Description                |
-| ----------------- | -------------- | -------------------------- |
-| `char`            | string \| null | Character in the slot      |
-| `isActive`        | boolean        | Whether the slot is active |
-| `hasFakeCaret`    | boolean        | Whether to show fake caret |
-| `placeholderChar` | string \| null | Placeholder character      |
+| Prop              | Type           | Description                                                               |
+| ----------------- | -------------- | ------------------------------------------------------------------------- |
+| `char`            | string \| null | Character in the slot                                                     |
+| `isActive`        | boolean        | Whether the slot is active                                                |
+| `hasFakeCaret`    | boolean        | Whether to show fake caret                                                |
+| `placeholderChar` | string \| null | Placeholder character                                                     |
+| `focus`           | () => void     | Focuses the input at this slot's position, suppressing iOS clear behavior |
+
+Each slot exposes a `focus()` method — no ref required. Pass it to `onPress` on a wrapping `Pressable` to let users tap any slot and resume typing from there:
+
+```tsx
+<OTPInput
+  maxLength={6}
+  render={({ slots }) => (
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      {slots.map((slot, index) => (
+        <Pressable key={index} onPress={slot.focus}>
+          <Slot {...slot} />
+        </Pressable>
+      ))}
+    </View>
+  )}
+/>
+```
+
+### OTPInputRef
+
+Use a `ref` to call imperative methods on the input:
+
+```tsx
+const ref = useRef<OTPInputRef>(null);
+<OTPInput ref={ref} ... />
+```
+
+| Method                     | Description                                                                                   |
+| -------------------------- | --------------------------------------------------------------------------------------------- |
+| `focus()`                  | Focus the input                                                                               |
+| `blur()`                   | Blur the input                                                                                |
+| `clear()`                  | Clear all digits                                                                              |
+| `setValue(value: string)`  | Set the current value programmatically                                                        |
+| `focusSlot(index: number)` | Truncate the value to `index` characters and focus — making slot `index` the new active slot |
 
 ## Web support
 
