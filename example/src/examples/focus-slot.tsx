@@ -6,9 +6,8 @@ import Animated, {
   withRepeat,
   withTiming,
   withSequence,
-  useSharedValue,
+  useDerivedValue,
 } from 'react-native-reanimated';
-import { useEffect } from 'react';
 
 export default function FocusSlotExample() {
   return (
@@ -17,8 +16,8 @@ export default function FocusSlotExample() {
         maxLength={6}
         render={({ slots }) => (
           <View style={styles.slotsRow}>
-            {slots.map((slot, index) => (
-              <Slot key={index} {...slot} />
+            {slots.map((slot, slotIndex) => (
+              <Slot key={`slot-${slotIndex}`} {...slot} />
             ))}
           </View>
         )}
@@ -41,18 +40,18 @@ function Slot({ char, isActive, hasFakeCaret, focus }: SlotProps) {
 }
 
 function FakeCaret() {
-  const opacity = useSharedValue(1);
-
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withSequence(
-        withTiming(0, { duration: 500 }),
-        withTiming(1, { duration: 500 })
+  const opacity = useDerivedValue(
+    () =>
+      withRepeat(
+        withSequence(
+          withTiming(0, { duration: 500 }),
+          withTiming(1, { duration: 500 })
+        ),
+        -1,
+        true
       ),
-      -1,
-      true
-    );
-  }, [opacity]);
+    []
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,

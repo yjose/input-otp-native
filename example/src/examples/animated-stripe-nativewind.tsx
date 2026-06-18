@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
   withSequence,
   useSharedValue,
+  useDerivedValue,
   FadeInDown,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
@@ -29,14 +30,14 @@ export default function AnimatedStripeOTPInput() {
       render={({ slots }) => (
         <View className="flex-1 flex-row items-center justify-center my-4">
           <View className="flex-row">
-            {slots.slice(0, 3).map((slot, idx) => (
-              <Slot key={idx} {...slot} index={idx} />
+            {slots.slice(0, 3).map((slot, slotIndex) => (
+              <Slot key={`slot-${slotIndex}`} {...slot} index={slotIndex} />
             ))}
           </View>
           <FakeDash />
           <View className="flex-row">
-            {slots.slice(3).map((slot, idx) => (
-              <Slot key={idx} {...slot} index={idx + 3} />
+            {slots.slice(3).map((slot, slotIndex) => (
+              <Slot key={`slot-${slotIndex}`} {...slot} index={slotIndex + 3} />
             ))}
           </View>
         </View>
@@ -124,28 +125,30 @@ function FakeDash() {
 }
 
 function FakeCaret() {
-  const opacity = useSharedValue(1);
-  const height = useSharedValue(24);
-
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withSequence(
-        withTiming(0, { duration: 500 }),
-        withTiming(1, { duration: 500 })
+  const opacity = useDerivedValue(
+    () =>
+      withRepeat(
+        withSequence(
+          withTiming(0, { duration: 500 }),
+          withTiming(1, { duration: 500 })
+        ),
+        -1,
+        true
       ),
-      -1,
-      true
-    );
-
-    height.value = withRepeat(
-      withSequence(
-        withTiming(20, { duration: 500 }),
-        withTiming(28, { duration: 500 })
+    []
+  );
+  const height = useDerivedValue(
+    () =>
+      withRepeat(
+        withSequence(
+          withTiming(20, { duration: 500 }),
+          withTiming(28, { duration: 500 })
+        ),
+        -1,
+        true
       ),
-      -1,
-      true
-    );
-  }, [opacity, height]);
+    []
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,

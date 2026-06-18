@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
   withSequence,
   useSharedValue,
+  useDerivedValue,
   withSpring,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
@@ -30,14 +31,14 @@ export default function StripeOTPInput() {
       render={({ slots }) => (
         <View className="flex-1 flex-row items-center justify-center my-4">
           <View className="flex-row">
-            {slots.slice(0, 3).map((slot, idx) => (
-              <Slot key={idx} {...slot} index={idx} />
+            {slots.slice(0, 3).map((slot, slotIndex) => (
+              <Slot key={`slot-${slotIndex}`} {...slot} index={slotIndex} />
             ))}
           </View>
           <FakeDash />
           <View className="flex-row">
-            {slots.slice(3).map((slot, idx) => (
-              <Slot key={idx} {...slot} index={idx} />
+            {slots.slice(3).map((slot, slotIndex) => (
+              <Slot key={`slot-${slotIndex}`} {...slot} index={slotIndex} />
             ))}
           </View>
         </View>
@@ -109,18 +110,18 @@ function FakeDash() {
 }
 
 function FakeCaret() {
-  const opacity = useSharedValue(1);
-
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withSequence(
-        withTiming(0, { duration: 500 }),
-        withTiming(1, { duration: 500 })
+  const opacity = useDerivedValue(
+    () =>
+      withRepeat(
+        withSequence(
+          withTiming(0, { duration: 500 }),
+          withTiming(1, { duration: 500 })
+        ),
+        -1,
+        true
       ),
-      -1,
-      true
-    );
-  }, [opacity]);
+    []
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
