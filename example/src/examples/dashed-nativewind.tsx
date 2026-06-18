@@ -8,9 +8,8 @@ import Animated, {
   withRepeat,
   withTiming,
   withSequence,
-  useSharedValue,
+  useDerivedValue,
 } from 'react-native-reanimated';
-import { useEffect } from 'react';
 import { cn } from './utils';
 
 export default function DashedOTPInput() {
@@ -28,8 +27,8 @@ export default function DashedOTPInput() {
         maxLength={5}
         render={({ slots }) => (
           <View className="flex-row items-center justify-center my-4">
-            {slots.map((slot, idx) => (
-              <Slot key={idx} {...slot} />
+            {slots.map((slot, slotIndex) => (
+              <Slot key={`slot-${slotIndex}`} {...slot} />
             ))}
           </View>
         )}
@@ -58,18 +57,18 @@ function Slot({ char, isActive, hasFakeCaret, focus }: SlotProps) {
 }
 
 function FakeCaret() {
-  const opacity = useSharedValue(1);
-
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withSequence(
-        withTiming(0, { duration: 500 }),
-        withTiming(1, { duration: 500 })
+  const opacity = useDerivedValue(
+    () =>
+      withRepeat(
+        withSequence(
+          withTiming(0, { duration: 500 }),
+          withTiming(1, { duration: 500 })
+        ),
+        -1,
+        true
       ),
-      -1,
-      true
-    );
-  }, [opacity]);
+    []
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
