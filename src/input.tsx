@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   input: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.flatten(StyleSheet.absoluteFill),
     /**
      * On iOS if the input has an opacity of 0, we can't paste text into it.
      * This is a workaround to allow pasting text into the input.
